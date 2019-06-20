@@ -1,11 +1,22 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-var taskSchema = new Schema({  
-  task:  {
+var contactSchema = new Schema({  
+  name:  {
       type: String,
       required: true
+  },
+  phone: {
+    type: String,
+    minlength: 10,
+    maxlength: 10,
+    required: true
+  },
+  email:{
+    type: String,
+    required: false
   }
+
 });
 const UserSchema = new mongoose.Schema({
   name: {
@@ -24,7 +35,7 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  tasks:[taskSchema]
+  contacts:[contactSchema]
 });
 
 const User = mongoose.model('User', UserSchema);

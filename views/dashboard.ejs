@@ -1,46 +1,46 @@
 <h1 class="mt-4">Dashboard</h1>
-<p class="lead mb-3">Welcome <%= user.name %> <br> <%=user.email%></p>
-<div><a href="/users/logout" class="btn btn-secondary">Logout</a>
+<p class="lead mb-3">Welcome <%= user.name %> <br>Email: <%=user.email%></p>
+<div class="row"><a href="#Updateprofile" class="btn btn-info">Change profile</a>
+  <a href="/users/logout" class="btn btn-secondary">Logout</a>
+  
 </div>
 <br>
-
-<form action="/users/task" method="POST">
+<h3>Create new Contact!</h3>
+<br>
+<form action="/users/task" method="POST" >
     <input type="hidden" name="_id" value="<%=user._id%>">
-    <input type="hidden" name="task_id" value="<%=user.tasks._id%>">
     
-         <div class="form-group row">
-        
-        <div class="col-12 col-sm-10">
-            <input type="text" class="form-control" id="task" name="task" 
-            placeholder="task" value="<%=user.tasks.task%>">
-        </div>
-        <div class="col-12 col-sm-2">
-            <button type="submit" class="btn btn-info">Add task</button>
-        </div>
-    </div> 
+    <div class="form-group row">        
+        <!-- <div class="col-12 col-sm-6"> -->
+            <label class="col-12 col-sm-2">Name</label>
+            <input type="text" class="form-control col-12 col-sm-5" id="name" name="name" 
+            placeholder="Name">
+        <!-- </div>        -->
+    </div>
+    <div class="form-group row">        
+          <!-- <div class="col-12 col-sm-6"> -->
+              <label class="col-12 col-sm-2">Phone</label>
+          <input type="text" class="form-control col-12 col-sm-5" id="phone" name="phone" 
+          placeholder="Phone number" >
+        <!-- </div>  -->
+    </div>
+    <div class="form-group row">        
+          <!-- <div class="col-12 col-sm-6"> -->
+              <label class="col-12 col-sm-2">Email</label>
+          <input type="email" class="form-control col-12 col-sm-5" id="name" name="email" 
+          placeholder="Email" >
+        <!-- </div> -->
+    </div>
+    <div class="form-group row"> 
+        <div class="col-12 col-sm-5 offset-4">
+          <button type="submit" class="btn btn-success">Save</button>
+          <a class="btn btn-info" href="./vie"> View Contacts</a>
+        </div> 
+    </div>
     
 </form> 
 
- 
-<% for (var i=user.tasks.length-1; i>=0; i--) { %>
-      <form action="/users/tasks/<%=user._id%>/delete/<%=user.tasks[i]._id%>" method="GET">
-         
-        <div class="col-12 col-sm-10">
-            <input type="text" class="form-control" id="task" name="task" 
-            placeholder="task" value="<%= user.tasks[i].task %>">
-        </div>
-        <button type="submit" class="btn btn-info" 
-        onclick="return confirm('Are you sure to delete this record ?');">Delete</button>
-        <a href="/users/tasks/<%=user._id%>/update/<%=user.tasks[i]._id%>">Save</a>
-
-          
-        </form>
-      <!-- <td>
-          <a href="/index/<% user.tasks[i]._id %>" onclick="return confirm('Are you sure to delete this record ?');"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
-      </td> -->
-  
-<% } %>
-
+<div id="Updateprofile">
 
 <div class="row mt-5">
     <div class="col-md-6 m-auto">
@@ -80,4 +80,9 @@
       </div>
     </div>
   </div>
+</div>
+
+
+
+
   

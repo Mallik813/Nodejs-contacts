@@ -93,36 +93,27 @@ router.get('/logout', (req, res) => {
   req.flash('success_msg', 'You are logged out');
   res.redirect('/users/login');
 });
-
-router.post('/task', (req, res)=>{
-    // console.log(req.body);
-    if (req.body.task_id == '')
-        insertRecord(req, res);
-        else
-        updateRecord(req, res);
-  
-});
-function insertRecord(req, res)
-{
-  const {_id, task}  = req.body;
+router.post('/task', (req, res) => {
+  const {_id, name, phone, email}  = req.body;
   let errors = [];
-  console.log(req.body);
-  if (!task) {
-    errors.push({ msg: ' Please enter a task ' });
-  }  
+  // console.log(req.body);
+  // console.log(User);
+  if (!name || !phone) {
+    errors.push({ msg: ' Please enter all details ' });
+  }    
+  User.updateOne({ _id:_id }, {$push:{contacts:{name, phone, email}}}, { new: true }, (err, doc) => {
+    if (!err) { 
+      // console.log(req.body);
+      res.redirect('/dashboard?Contact+added'); }
+    else
+      console.log('Error during record update : ' + err);    
+});  
+});
+
 
   
-  User.updateOne({ _id:_id }, {$push:{tasks:{task}}}, { new: true }, (err, doc) => {
-    if (!err) { res.redirect('../dashboard?Successfully+Updated'); }
-    else
-      console.log('Error during record update : ' + err);
-    
-});
-}
-function updateRecord(req, res)
-{
-  console.log("byee");
-}
+
+
 
 router.post ('/update', (req, res)=>{
     const {_id, name, email} = req.body;
@@ -137,52 +128,43 @@ router.post ('/update', (req, res)=>{
   });
 });
 
-router.get('/tasks/:user_id/delete/:task_id', (req, res)=>{
+router.get('/contact/:user_id/delete/:contact_id', (req, res)=>{
   
   let errors=[];
-  // console.log(req.params.user_id);
-  // console.log(req.params.task_id);
+  console.log(req.params.user_id);
+  console.log(req.params.contact_id);
 
   User.findOneAndUpdate(
     {_id: req.params.user_id}, 
-    {$pull: {tasks: {_id: req.params.task_id}}},
+    {$pull: {contacts: {_id: req.params.contact_id}}},
     function(err, data){
        if(err) return err;
        else
-       res.redirect('../../../../dashboard?Task+deleted');
+       res.redirect('../../../../vie?Contact+deleted');
       //  res.send({data:data});
 });
 }); 
-
-router.get('/tasks/:user_id/update/:task_id', (req, res)=>{
-
-  User.findById(req.params.user_id   , (err, doc) => {
-    console.log(doc.tasks);
-//     if (!err) {
-//         res.render("dashboard", {doc});
-//     }
+router.post('/sendToDashboard/:user_id',(req, res)=>{
+    
+    const {contact_id, contact_name, contact_phone, contact_email}= req.body;
+    console.log(contact_id, contact_name, contact_phone, contact_email);
+    User.updateOne(
+      { 
+          _id: req.params.user_id,
+          "contacts._id": contact_id
+      },
+      { $set: { 
+          "contacts.$.name": contact_name,
+          "contacts.$.phone": contact_phone,
+          "contacts.$.email": contact_email
+        } },(err, result)=>{
+          if(!err) res.redirect('../../vie');
+        }
+  )
 });
 
-
-//   console.log(req.params.task_id.task);
-  
-//   User.findOneAndUpdate(  
-//     { 
-//         "_id": req.params.user_id,
-//         "tasks._id": req.params.task_id
-//     },
-//     { "$set": { 
-//       "tasks.$.task": "Make it zero"      
-//   } } ,
-//     function(err, data){
-//       if(err) return err;
-//       else
-//       res.redirect('../../../../dashboard?Task');
-//       }      
-// )
-});
-  
 
 
 
 module.exports = router;
+

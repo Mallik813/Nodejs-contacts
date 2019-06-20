@@ -24,9 +24,6 @@ router.get('/home', (req, res)=>{
     })
   }
 });
-
-
-
 // Dashboard
 router.get('/dashboard', ensureAuthenticated, (req, res) =>
   res.render('dashboard', {
@@ -34,14 +31,13 @@ router.get('/dashboard', ensureAuthenticated, (req, res) =>
     ID: req.user._id
   })
 );
-router.get('/vie', (req, res)=>{
+router.get('/vie', ensureAuthenticated, (req, res)=>{
   User.find({}, (err, docs)=>{
     if(err) res.json(err);
     // else res.send(docs);
-    else res.render('vie', {users: docs});
+    else res.render('vie', {user: req.user});
   });
 });
-
 
 
 

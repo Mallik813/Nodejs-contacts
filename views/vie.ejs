@@ -1,3 +1,33 @@
+<div class="container mt-5">
+        <h3><a class="btn btn-secondary" href="/dashboard"><i class="fa fa-plus"></i> Create New</a> All contacts</h3>
 
-<p>    <%=users[0].email%>
-</p>
+        <table class="table table-striped">
+                <thead>
+                    <tr>
+                        
+                        <th>Name</th>
+                        <th>Mobile</th>
+                        <th>Email</th>
+                        
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%for(var i=0;i<user.contacts.length;i++){%>
+                <form action="/users/sendToDashboard/<%=user._id%>" method="POST">
+                    <input type="hidden" value="<%=user.contacts[i]._id%>" name="contact_id">
+                    <tr>
+                        <td><input type="readonly" value="<%=user.contacts[i].name%>" name="contact_name"></td>
+                        <td><input type="readonly" value="<%=user.contacts[i].phone%>" name="contact_phone"></td>
+                        <td><input type="readonly" value="<%=user.contacts[i].email%>" name="contact_email" ></td>
+                        <td>
+                            <button class="btn btn-success" type="submit" onclick="return confirm('Are you sure to save these changes ?');">SAVE</button>
+                            <a href="/users/contact/<%=user._id%>/delete/<%=user.contacts[i]._id%>" class="btn btn-danger" onclick="return confirm('Are you sure to delete this record ?');">DELETE</a>
+                        </td>
+                    </tr>
+                </form>     
+                    <%}%>
+                    
+                </tbody>
+            </table>
+</div>
